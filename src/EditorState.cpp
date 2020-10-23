@@ -46,6 +46,7 @@ void EditorState::initFonts()
 
 void EditorState::createMapSurface(sf::IntRect& mapRect)
 {
+	// TODO: use sf::LineStrip instead
 	this->mapShape.setSize(sf::Vector2f(mapRect.width, mapRect.height));
 	this->mapShape.setPosition(mapRect.left, mapRect.top);
 	this->mapShape.setFillColor(this->fillColor);

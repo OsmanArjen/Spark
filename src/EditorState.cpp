@@ -18,7 +18,6 @@ void EditorState::initView()
 
 }
 
-
 void EditorState::initTextures()
 {
 
@@ -48,7 +47,7 @@ void EditorState::initFonts()
 void EditorState::createMapSurface(sf::IntRect& mapRect)
 {
 	this->mapShape.setSize(sf::Vector2f(mapRect.width, mapRect.height));
-	this->mapShape.setPosition(mapRect.left + this->defOutlineThicc, mapRect.top + this->defOutlineThicc);
+	this->mapShape.setPosition(mapRect.left, mapRect.top);
 	this->mapShape.setFillColor(this->fillColor);
 	this->mapShape.setOutlineThickness(this->defOutlineThicc);
 	this->mapShape.setOutlineColor(sf::Color(250, 150, 100));	
@@ -123,7 +122,6 @@ void EditorState::handleEvents(sf::Event& events)
 			this->view.zoom(0.9f);
 		}
 
-
 		
 		this->stateData->window->setView(this->view);
 		this->mapShape.setOutlineThickness(this->defOutlineThicc * this->zoomScale);
@@ -168,12 +166,30 @@ void EditorState::update(const float& dt)
 }
 
 // Render Functions
+void EditorState::renderGrid(sf::RenderTarget* surface)
+{
+	const sf::Vector2f& mapPos = this->mapShape.getPosition();
+	sf::Vector2f  coordMapPos = this->stateData->window->mapPixelToCoords(sf::Vector2i(mapPos.x, mapPos.y));
+
+	for(float y = coordMapPos.y; y < this->mapRect.height - this->gridSize.y; y += this->gridSize.y)
+	{
+		std::cout << "Y: " << y << std::endl;
+	}
+
+	for(float x = coordMapPos.x; x < this->mapRect.width - this->gridSize.x; x += this->gridSize.x)
+	{
+		std::cout <<" X: " << x << std::endl;
+	}	
+}
+
 void EditorState::render(sf::RenderTarget* surface)
 {
 	if(!surface)
 		surface = this->stateData->window;
 
 	surface->setView(this->view);
+
+	this->renderGrid(surface);
 
 	surface->draw(this->mapShape);
 

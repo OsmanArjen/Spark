@@ -48,7 +48,7 @@ void EditorState::createMapSurface(sf::IntRect& mapRect)
 {
 	this->mapShape.setSize(sf::Vector2f(mapRect.width, mapRect.height));
 	this->mapShape.setPosition(mapRect.left + this->defOutlineThicc, mapRect.top + this->defOutlineThicc);
-	this->mapShape.setFillColor(sf::Color::Transparent);
+	this->mapShape.setFillColor(this->fillColor);
 	this->mapShape.setOutlineThickness(this->defOutlineThicc);
 	this->mapShape.setOutlineColor(sf::Color(250, 150, 100));	
 

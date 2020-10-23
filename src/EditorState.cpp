@@ -5,8 +5,8 @@ void EditorState::initView()
 {
 	this->view.setSize(
 		sf::Vector2f(
-				this->mapRect.width,
-				this->mapRect.height
+			this->stateData->gfxSettings["width"].asFloat(),
+			this->stateData->gfxSettings["height"].asFloat()
 			)
 		);
 
@@ -17,6 +17,7 @@ void EditorState::initView()
 
 
 }
+
 
 void EditorState::initTextures()
 {

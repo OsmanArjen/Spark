@@ -45,6 +45,7 @@ public:
 	void update(const float& dt);
 
 	// Render Functions
+	void renderGrid(sf::RenderTarget* surface);
 	void render(sf::RenderTarget* surface = nullptr);
 };
 

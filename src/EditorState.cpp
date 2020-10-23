@@ -170,14 +170,13 @@ void EditorState::update(const float& dt)
 void EditorState::renderGrid(sf::RenderTarget* surface)
 {
 	const sf::Vector2f& mapPos = this->mapShape.getPosition();
-	sf::Vector2f  coordMapPos = this->stateData->window->mapPixelToCoords(sf::Vector2i(mapPos.x, mapPos.y));
 
-	for(float y = coordMapPos.y; y < this->mapRect.height - this->gridSize.y; y += this->gridSize.y)
+	for(float y = mapPos.y; y < (mapPos.y + this->mapRect.height) - this->gridSize.y; y += this->gridSize.y)
 	{
 		std::cout << "Y: " << y << std::endl;
 	}
 
-	for(float x = coordMapPos.x; x < this->mapRect.width - this->gridSize.x; x += this->gridSize.x)
+	for(float x = mapPos.x; x < (mapPos.x + this->mapRect.width) -  this->gridSize.x; x += this->gridSize.x)
 	{
 		std::cout <<" X: " << x << std::endl;
 	}	

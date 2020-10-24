@@ -47,17 +47,32 @@ void EditorState::initFonts()
 void EditorState::createMapSurface(sf::IntRect& mapRect)
 {
 	// TODO: use sf::LineStrip instead
-	this->mapShape.setSize(sf::Vector2f(mapRect.width, mapRect.height));
-	this->mapShape.setPosition(mapRect.left, mapRect.top);
-	this->mapShape.setFillColor(this->fillColor);
-	this->mapShape.setOutlineThickness(this->defOutlineThicc);
-	this->mapShape.setOutlineColor(sf::Color(250, 150, 100));	
+	// this->mapShape.setSize(sf::Vector2f(mapRect.width, mapRect.height));
+	// this->mapShape.setPosition(mapRect.left, mapRect.top);
+	// this->mapShape.setFillColor(this->fillColor);
+	// this->mapShape.setOutlineThickness(this->defOutlineThicc);
+	// this->mapShape.setOutlineColor(sf::Color(250, 150, 100));	
+
+	this->mapOutline[0].position = sf::Vector2f(this->mapRect.left, this->mapRect.top);
+	this->mapOutline[0].color = sf::Color::White;
+
+	this->mapOutline[1].position = sf::Vector2f(this->mapRect.left + this->mapRect.width, this->mapRect.top);
+	this->mapOutline[1].color = sf::Color::White;
+
+	this->mapOutline[2].position = sf::Vector2f(this->mapRect.left + this->mapRect.width, this->mapRect.top + this->mapRect.height);
+	this->mapOutline[2].color = sf::Color::White;
+
+	this->mapOutline[3].position = sf::Vector2f(this->mapRect.left, this->mapRect.top + this->mapRect.height);
+	this->mapOutline[3].color = sf::Color::White;
+
+	this->mapOutline[4].position = sf::Vector2f(this->mapRect.left, this->mapRect.top);
+	this->mapOutline[4].color = sf::Color::White;
 
 }
 
 // Constructors/Destructors
 EditorState::EditorState(StateData* state_data, sf::IntRect map_rect, sf::Vector2i grid_size, sf::Color fill_color)
-	: State(state_data), mapRect(map_rect), gridSize(grid_size), fillColor(fill_color), zoomScale(1.0f), defOutlineThicc(2.0f)
+	: State(state_data), mapRect(map_rect), gridSize(grid_size), fillColor(fill_color), zoomScale(1.0f), mapOutline(sf::LineStrip, 5)
 
 {
 
@@ -125,7 +140,6 @@ void EditorState::handleEvents(sf::Event& events)
 
 		
 		this->stateData->window->setView(this->view);
-		this->mapShape.setOutlineThickness(this->defOutlineThicc * this->zoomScale);
 
 		const sf::Vector2f newMousePos = this->stateData->window->mapPixelToCoords(sf::Vector2i(events.mouseWheelScroll.x, events.mouseWheelScroll.y));
 		const sf::Vector2f deltaPos = oldMousePos- newMousePos;
@@ -169,17 +183,20 @@ void EditorState::update(const float& dt)
 // Render Functions
 void EditorState::renderGrid(sf::RenderTarget* surface)
 {
-	const sf::Vector2f& mapPos = this->mapShape.getPosition();
+	const sf::Vector2f& mapPos = this->mapOutline[0].position;
 
 	for(float y = mapPos.y; y < (mapPos.y + this->mapRect.height) - this->gridSize.y; y += this->gridSize.y)
 	{
-		std::cout << "Y: " << y << std::endl;
+
 	}
 
 	for(float x = mapPos.x; x < (mapPos.x + this->mapRect.width) -  this->gridSize.x; x += this->gridSize.x)
 	{
-		std::cout <<" X: " << x << std::endl;
+
 	}	
+
+
+
 }
 
 void EditorState::render(sf::RenderTarget* surface)
@@ -191,8 +208,6 @@ void EditorState::render(sf::RenderTarget* surface)
 
 	this->renderGrid(surface);
 
-	surface->draw(this->mapShape);
-
-
+	surface->draw(this->mapOutline);
 
 }

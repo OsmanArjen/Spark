@@ -13,12 +13,9 @@ private:
 	sf::Font font;
 	sf::Color fillColor;
 	sf::View view;
-	sf::RectangleShape mapShape;
-	sf::Vector2i mousePosScreen;
-	sf::Vector2i mousePosWindow;
-	sf::Vector2f mousePosView;
+	sf::VertexArray mapOutline;
 
-	float zoomScale;
+	double zoomScale;
 	float defOutlineThicc;
 	
 

@@ -57,8 +57,8 @@ void SparkApp::initStateData()
 
 void SparkApp::initStates()
 {
-	// NOTE: verilen değerler şuan denemelik bu yüzden takılmayın değerlere
-	this->states.push(new EditorState(&this->stateData, {this->gfxConfig["width"].asInt() / 2,this->gfxConfig["height"].asInt() / 2, 500, 500}, {8, 8}, sf::Color::Red));
+
+	this->states.push(new EditorState(&this->stateData, {50, 50, 500, 500}, {25, 25}));
 }
 
 

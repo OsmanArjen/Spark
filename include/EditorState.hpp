@@ -11,9 +11,8 @@ private:
 	sf::IntRect mapRect;
 	sf::Vector2i gridSize;
 	sf::Font font;
-	sf::Color fillColor;
 	sf::View view;
-	sf::VertexArray mapOutline;
+	sf::VertexArray mapOutlines, mapGridlines;
 
 	double zoomScale;
 	float defOutlineThicc;
@@ -24,11 +23,11 @@ private:
 	void initTextures();
 	void initKeybinds();
 	void initFonts();
-
-	void createMapSurface(sf::IntRect& mapRect);
+	void initMapOutlines();
+	void initMapGridlines();
 public:
 	// Constructors/Destructors
-	EditorState(StateData* state_data, sf::IntRect map_rect, sf::Vector2i grid_size, sf::Color fill_color);
+	EditorState(StateData* state_data, sf::IntRect map_rect, sf::Vector2i grid_size);
 	~EditorState();
 
 	// Handle SFML Events

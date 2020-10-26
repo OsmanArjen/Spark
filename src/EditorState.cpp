@@ -47,7 +47,6 @@ void EditorState::initFonts()
 
 void EditorState::initMapOutlines()
 {
-
 	// Initialize map's outline
 	this->mapOutlines[0].position = sf::Vector2f(this->mapRect.left, this->mapRect.top);
 	this->mapOutlines[0].color = sf::Color::White;
@@ -63,7 +62,6 @@ void EditorState::initMapOutlines()
 
 	this->mapOutlines[4].position = sf::Vector2f(this->mapRect.left, this->mapRect.top);
 	this->mapOutlines[4].color = sf::Color::White;
-
 }
 
 void EditorState::initMapGridlines()
@@ -84,7 +82,6 @@ void EditorState::initMapGridlines()
 		this->mapGridlines.append(sf::Vertex(sf::Vector2f(x, mapPos.y) , sf::Color::Red));
 		this->mapGridlines.append(sf::Vertex(sf::Vector2f(x, mapPos.y + this->mapRect.height) , sf::Color::Red));
 	}	
-
 	this->mapGridlines.setPrimitiveType(sf::Lines);
 }
 
@@ -93,7 +90,6 @@ EditorState::EditorState(StateData* state_data, sf::IntRect map_rect, sf::Vector
 	: State(state_data), mapRect(map_rect), gridSize(grid_size), mapOutlines(sf::LineStrip, 5), zoomScale(1.0f)
 
 {
-
 	// Initilazer functions
 	this->initView();
 	this->initTextures();
@@ -101,6 +97,30 @@ EditorState::EditorState(StateData* state_data, sf::IntRect map_rect, sf::Vector
 	this->initMapOutlines();
 	this->initMapGridlines();
 
+	// Initialize Variables
+	this->zoomFactors = std::vector<float>{
+		0.0625,
+		0.125,
+		0.25,
+		0.33,
+		0.5,
+		0.75,
+		1.0,
+		1.5,
+		2.0,
+		3.0,
+		4.0,
+		5.5,
+		8.0,
+		11.0,
+		16.0,
+		23.0,
+		32.0,
+		45.0,
+		64.0,
+		90.0,
+		128.0,
+	};
 }
 
 EditorState::~EditorState()
@@ -111,17 +131,13 @@ EditorState::~EditorState()
 // Handle SFML Events
 void EditorState::handleEvents(sf::Event& events)
 {
-
 	/* Panning The Map Surface */
-	//std::cout << this->stateData->window->mapPixelToCoords(sf::Mouse::getPosition(*this->stateData->window)).x << ", " << this->stateData->window->mapPixelToCoords(sf::Mouse::getPosition(*this->stateData->window)).y << std::endl;
-
+	
 	// Static Local variables
 	static bool panned = false;
 	static sf::Vector2f startPanVect(0.0f, 0.0f);
-
 	if (events.type == sf::Event::MouseButtonPressed)
 	{
-
 		startPanVect = this->stateData->window->mapPixelToCoords(sf::Vector2i(events.mouseButton.x, events.mouseButton.y));
 		panned = true;
 	}
@@ -132,7 +148,6 @@ void EditorState::handleEvents(sf::Event& events)
 
 		this->view.setCenter(this->view.getCenter() + deltaPos);
 		this->stateData->window->setView(this->view);
-
 		startPanVect = this->stateData->window->mapPixelToCoords(sf::Vector2i(events.mouseMove.x, events.mouseMove.y));
 	}
 	else if (events.type == sf::Event::MouseButtonReleased)
@@ -142,21 +157,33 @@ void EditorState::handleEvents(sf::Event& events)
 
 	if (events.type == sf::Event::MouseWheelScrolled)
 	{	
-		const sf::Vector2f oldMousePos = this->stateData->window->mapPixelToCoords(sf::Vector2i(events.mouseWheelScroll.x, events.mouseWheelScroll.y));
-
-		
-		if (events.mouseWheelScroll.delta <= -1)
+		const sf::Vector2f oldMousePos = this->stateData->window->mapPixelToCoords(sf::Vector2i(events.mouseWheelScroll.x, events.mouseWheelScroll.y));	
+		if (events.mouseWheelScroll.delta <= -1) // Zoom out
 		{
-			this->zoomScale *= 1.1f;
-			this->view.zoom(1.1f);
+			for (const float& zfactor : this->zoomFactors)
+			{
+				if (zfactor > this->zoomScale)
+				{
+					this->zoomScale = zfactor;
+					break;
+				}
+			}
 		}
-		else if (events.mouseWheelScroll.delta >= 1)
-		{
-			this->zoomScale *= 0.9f;
-			this->view.zoom(0.9f);
+		else if (events.mouseWheelScroll.delta >= 1) // Zoom in
+		{		
+			for (std::vector<float>::reverse_iterator zfactor = this->zoomFactors.rbegin(); 
+					zfactor != this->zoomFactors.rend(); ++zfactor)
+			{
+				if (*zfactor < this->zoomScale)
+				{
+					this->zoomScale = *zfactor;
+					break;
+				}
+			} 
 		}
-
-		
+		// Update our view
+		this->view.setSize(this->stateData->window->getDefaultView().getSize()); // Reset the size
+		this->view.zoom(this->zoomScale); // Apply the zoom level
 		this->stateData->window->setView(this->view);
 
 		const sf::Vector2f newMousePos = this->stateData->window->mapPixelToCoords(sf::Vector2i(events.mouseWheelScroll.x, events.mouseWheelScroll.y));
@@ -165,16 +192,11 @@ void EditorState::handleEvents(sf::Event& events)
 		this->view.setCenter(this->view.getCenter() + deltaPos);
 		this->stateData->window->setView(this->view);
 	}
-
-
-	
-
 }
 	
 
 
 // Update Functions
-
 void EditorState::updateInput(const float& dt)
 {
 	/* Keybinds */	
@@ -187,14 +209,10 @@ void EditorState::updateInput(const float& dt)
 	{
 		std::cout << "Pressed PREV_LAYER\n";
 	}
-
-
-
 }
 
 void EditorState::update(const float& dt)
 {
-
 	this->updateInput(dt);
 }
 
@@ -203,10 +221,6 @@ void EditorState::render(sf::RenderTarget* surface)
 {
 	if(!surface)
 		surface = this->stateData->window;
-
-	surface->setView(this->view);
-
 	surface->draw(this->mapGridlines);
 	surface->draw(this->mapOutlines);
-
 }

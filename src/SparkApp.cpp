@@ -57,7 +57,6 @@ void SparkApp::initStateData()
 
 void SparkApp::initStates()
 {
-
 	this->states.push(new EditorState(&this->stateData, {50, 50, 500, 500}, {25, 25}));
 }
 
@@ -67,7 +66,7 @@ void SparkApp::initStates()
 // Constructors/Destructors
 SparkApp::SparkApp()
 {
-	
+	// Initilazer functions
 	this->initKeys();
 	this->initWindow();
 	this->initStateData();
@@ -78,7 +77,6 @@ SparkApp::~SparkApp()
 {
 
 	delete this->window;
-
 	while(!this->states.empty())
 	{
 		delete this->states.top();
@@ -89,7 +87,6 @@ SparkApp::~SparkApp()
 // Main loop functions
 void SparkApp::updateDeltaTime()
 {
-
 	this->dt = this->clock.restart().asSeconds();
 }
 
@@ -99,7 +96,6 @@ void SparkApp::updateSFMLEvents()
 	{
 		if (this->sfEvents.type == sf::Event::Closed)
 			this->window->close();
-
 
 		// Handle Events in States
 		if (!this->states.empty())
@@ -112,29 +108,23 @@ void SparkApp::updateSFMLEvents()
 
 void SparkApp::update()
 {
-
 	this->updateSFMLEvents();
 
 	if (!this->states.empty())
 	{
 		if (this->window->hasFocus())
 		{
-			this->states.top()->update(this->dt);
-			
+			this->states.top()->update(this->dt);	
 			if(this->states.top()->getQuit())
 			{
-
 				delete this->states.top();
 				this->states.pop();
 			}
 		}
-
 	}
 	else
 	{
 		// End the Application
-
-
 		this->window->close();
 	}
 }
@@ -154,7 +144,6 @@ void SparkApp::render()
 
 void SparkApp::run()
 {
-
 	while(this->window->isOpen())
 	{
 		this->updateDeltaTime();

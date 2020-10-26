@@ -13,10 +13,8 @@ private:
 	sf::Font font;
 	sf::View view;
 	sf::VertexArray mapOutlines, mapGridlines;
-
-	double zoomScale;
-	float defOutlineThicc;
-	
+	std::vector<float> zoomFactors;
+	float zoomScale;
 
 	// Initializer Functions
 	void initView();
@@ -32,9 +30,6 @@ public:
 
 	// Handle SFML Events
 	void handleEvents(sf::Event& events);
-
-	// MosePos Converters
-
 
 	// Update Functions
 	void updateInput(const float& dt);

@@ -21,6 +21,9 @@ private:
     Json::Value gfxConfig;
     sf::ContextSettings gfxContext;
     
+    // Style Settings
+    Json::Value styleConfig;
+
     // DeltaTime
 	float dt;
 
@@ -28,6 +31,7 @@ private:
 	void initWindow();
 	void initKeys();
     void initStateData();
+    void initColorStyles();
 	void initStates();
 
 

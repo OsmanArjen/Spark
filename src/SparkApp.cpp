@@ -55,9 +55,15 @@ void SparkApp::initStateData()
 	this->stateData.states      = &this->states;
 }
 
+void SparkApp::initColorStyles()
+{
+	this->styleConfig = State::readJSONConfig("../include/styles.json");
+}
+
 void SparkApp::initStates()
 {
-	this->states.push(new EditorState(&this->stateData, {50, 50, 500, 500}, {25, 25}));
+	// TODO: get color styles from config files
+	this->states.push(new EditorState(&this->stateData, {50, 50, 640, 640}, {32, 32}, {4,217,255}, sf::Color::White));
 }
 
 
@@ -70,6 +76,7 @@ SparkApp::SparkApp()
 	this->initKeys();
 	this->initWindow();
 	this->initStateData();
+	this->initColorStyles();
 	this->initStates();
 }
 
@@ -131,7 +138,7 @@ void SparkApp::update()
 
 void SparkApp::render()
 {
-	this->window->clear();
+	this->window->clear(sf::Color(51,51,51));
 
 	// Render Current State...
 	if(!this->states.empty())

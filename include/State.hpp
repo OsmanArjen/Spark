@@ -38,14 +38,9 @@ class State
 {
 protected:
 	// Variables 
-
-	StateData* stateData;
-
-	std::map<KeyBind, int> keybinds;
-
 	bool quit;
-
-	// Resources
+	StateData* stateData;
+	std::map<KeyBind, int> keybinds;
 	std::map<const char*, sf::Texture> textures;
 
 	// Functions
@@ -70,7 +65,7 @@ public:
 	virtual void update(const float& dt) = 0;
 
 	// Render interface
-	virtual void render(sf::RenderTarget* surface = nullptr) = 0;
+	virtual void render() = 0;
 
 	// Static members
 	static Json::Value readJSONConfig(const char* path);

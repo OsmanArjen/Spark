@@ -15,10 +15,10 @@ void sp::MapLayer::initLayerTileRects()
 
 // Constructor
 sp::MapLayer::MapLayer(const sf::Vector2f& map_grid, 
-					   const sf::Vector2f& grid_size,
-					   int queue_indx,
-					   MapLayer* base_layer,
-					   MapLayer* sub_layer)
+                       const sf::Vector2f& grid_size,
+                       int queue_indx,
+                       MapLayer* base_layer,
+                       MapLayer* sub_layer)
 	: m_mapGrid(map_grid)
 	, m_gridSize(grid_size)
 	, m_visible(true)

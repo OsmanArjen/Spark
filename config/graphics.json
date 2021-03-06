@@ -1,0 +1,17 @@
+{
+	
+    "title": "-Spark",
+
+    "width": 800,
+    "height": 600,
+
+    "fullscreen": false,
+
+    "antialiasing_level": 0,
+
+    "framerate_limit":120,
+    
+    "vertical_sync":false
+
+    
+}

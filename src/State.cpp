@@ -8,10 +8,7 @@ State::State()
 	
 }
 
-State::~State()
-{
-	
-}
+
 
 // Accessors
 const bool& State::getQuit() const

@@ -3,11 +3,11 @@
 
 #include "modules.hpp"
 
-class State; // Declare State struct
+class State; // Declare State class
 
 struct StateData
 {
-	/* Container Class for State Class*/
+	/* Container struct for State Class*/
 
 	Json::Value gfxSettings;
 
@@ -27,22 +27,14 @@ private:
 	// For Quit checking 
 	bool m_quit;
 public:
-	// Constructors/Destructors
 	State();
-	virtual ~State();
-
-	// Accessors
-	const  bool& getQuit() const;
-
-	// Functions	
+	const  bool& getQuit() const;	
 	void quitState(); 
-
+	
 	// Handle SFML Events
 	virtual void handleEvents(sf::Event& events) = 0;
-
 	// Update interface
 	virtual void update(const float& dt) = 0;
-
 	// Render interface
 	virtual void render() = 0;
 

@@ -1,24 +1,26 @@
 // FIX: layer sisteminde düzenlemeler veya hatalar olacak onları düzelt!
-#include "../include/MapLayer.hpp"
+#include "MapLayer.hpp"
 
 // Initializer Function for tileRects
 void sp::MapLayer::initLayerTileRects()
 {
 	for (int y = 0; y < m_mapGrid.y; y++)
 	{
+		m_tileRects.push_back(std::vector<Tile>());
 		for (int x = 0; x < m_mapGrid.x; x++)
 		{
-			m_tileRects.push_back({{x * m_gridSize.x, y * m_gridSize.y}, m_gridSize});
+			std::vector<Tile>& TileRow{m_tileRects.back()};
+			TileRow.push_back({ {x * m_gridSize.x, y * m_gridSize.y}, m_gridSize, {x,y} });
 		}
 	}
 }
 
 // Constructor
 sp::MapLayer::MapLayer(const sf::Vector2f& map_grid, 
-                       const sf::Vector2f& grid_size,
-                       int queue_indx,
-                       MapLayer* base_layer,
-                       MapLayer* sub_layer)
+					   const sf::Vector2f& grid_size,
+					   int queue_indx,
+					   MapLayer* base_layer,
+					   MapLayer* sub_layer)
 	: m_mapGrid(map_grid)
 	, m_gridSize(grid_size)
 	, m_visible(true)
@@ -40,7 +42,7 @@ const bool& sp::MapLayer::getVisible() const
 	return m_visible;
 }
 
-std::vector<sp::Tile>& sp::MapLayer::getTileRects()
+sp::MapLayer::TileRects_t& sp::MapLayer::getTileRects()
 {
 	return m_tileRects;
 }
@@ -80,9 +82,12 @@ void sp::MapLayer::render(sf::RenderTarget* surface)
 {
 	if(m_visible)
 	{	
-		for(Tile& tile : m_tileRects)
+		for(std::vector<Tile>& tilerow : m_tileRects)
 		{	
-			tile.render(surface);
+			for(Tile& tile : tilerow)
+			{
+				tile.render(surface);
+			}
 		}
 	}
 }

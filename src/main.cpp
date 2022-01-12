@@ -1,4 +1,4 @@
-#include "../include/SparkApp.hpp"
+#include "SparkApp.hpp"
 
 int main(int argc, char const *argv[])
 {

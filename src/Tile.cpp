@@ -1,14 +1,16 @@
-#include "../include/Tile.hpp"
+#include "Tile.hpp"
 
 // Our namespace
 using namespace sp;
 
 // Constructor
 Tile::Tile(const sf::Vector2f& pos, 
-               const sf::Vector2f& size, 
-               const bool& selected)
+           const sf::Vector2f& size,
+           const sf::Vector2i& gridpos, 
+           const bool& selected)
 	: m_shape(size)
 	, m_texcoords(0,0)
+	, m_gridpos(gridpos)
 	, m_selected(selected)
 {
 	m_shape.setPosition(pos);
@@ -33,6 +35,11 @@ const sf::Vector2f&  Tile::getPosition()
 const sf::Vector2f&  Tile::getSize()
 {
 	return m_shape.getSize();
+}
+
+const sf::Vector2i&  Tile::getGridPosition()
+{
+	return m_gridpos;
 }
 
 const sf::Texture*   Tile::getTexture()
@@ -65,6 +72,17 @@ void Tile::setPosition(const float& x, const float& y)
 void Tile::setPosition(const sf::Vector2f& position)
 {
 	setPosition(position.x, position.y);
+}
+
+void Tile::setGridPosition(const int& x, const int& y)
+{
+	m_gridpos.x = x;
+	m_gridpos.y = y;
+}
+
+void Tile::setGridPosition(const sf::Vector2i& position)
+{
+	setGridPosition(position.x, position.y);
 }
 
 void Tile::setSize(const sf::Vector2f& size)

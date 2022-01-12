@@ -1,10 +1,9 @@
-#include "../include/SparkGUI.hpp"
+#include "SparkGUI.hpp"
 #include <iostream>
 // Button widget
-
 void sp::Button::updateText()
 {
-	// Adding local bounds position because local bounds have offset
+	// We are adding local bounds position because local bounds have offset
 	// The local bounds aren't set to position 0,0 as with a rectangle or sprite
     m_text.setOrigin(m_text.getGlobalBounds().width  / 2.f + m_text.getLocalBounds().left,
     				 m_text.getGlobalBounds().height / 2.f + m_text.getLocalBounds().top);
@@ -12,16 +11,18 @@ void sp::Button::updateText()
 }
 
 // Constructor/Destructor
-sp::Button::Button(const sf::Vector2f& pos, const sf::Vector2f& size,
-				   const std::string& text, sf::Font& font,
-				   unsigned int charSize,
-				   const sp::Style& idle_style,
-				   const sp::Style& hover_style,
-				   const sp::Style& active_style)
+sp::Button::Button(const std::string& text, sf::Font& font,
+                   unsigned int charSize,
+                   const sf::Vector2f& pos, 
+                   const sf::Vector2f& size,
+                   const float& padx,
+                   const float& pady,
+                   const sp::Style& idle_style,
+                   const sp::Style& hover_style,
+                   const sp::Style& active_style)
 	: m_text(text, font, charSize)
-	, m_charSize(charSize)
 	, m_Bstate(ButtonState::IDLE)
-
+	, m_padx(padx), m_pady(pady)
 
 {
 	// Initialize styles
@@ -31,12 +32,12 @@ sp::Button::Button(const sf::Vector2f& pos, const sf::Vector2f& size,
 
 	// Initialize shape and text
 	m_shape.setPosition(pos);
-	m_shape.setSize(size);
+	setSize(size); // Setting size of shape
+
 	m_shape.setFillColor(m_idleStyle.backgroundColor);
 	m_shape.setOutlineThickness(m_idleStyle.outlineThickness);
 	m_shape.setOutlineColor(m_idleStyle.outlineColor);
-	m_text.setFillColor(m_idleStyle.foregroundColor);			
-	updateText();						
+	m_text.setFillColor(m_idleStyle.foregroundColor);									
 }
 
 sp::Button::~Button()
@@ -99,25 +100,48 @@ void sp::Button::setPosition(const sf::Vector2f& pos)
 
 void sp::Button::setSize(const sf::Vector2f& size)
 {
-	m_shape.setSize(size);
+	sf::FloatRect textBounds{m_text.getLocalBounds()};
+	if(size.x <= textBounds.width && size.y <= textBounds.height)
+	{
+		m_shape.setSize({textBounds.width + (m_padx * 2.f), textBounds.height + (m_pady * 2.f)});
+	}
+	else
+	{
+		m_shape.setSize({size.x + (m_padx * 2.f), size.y + (m_pady * 2.f)});
+	}
 	updateText();
 }
 
 void sp::Button::setText(const std::string& text)
 {
+	sf::FloatRect oldBounds{m_text.getLocalBounds()};
 	m_text.setString(text);
+	sf::FloatRect newBounds{m_text.getLocalBounds()};
+	sf::Vector2f  deltaSize{newBounds.width  - oldBounds.width,
+	                        newBounds.height - newBounds.height};
+	setSize(m_shape.getSize() + deltaSize); // Apply new shape size
 	updateText();
 }
 
 void sp::Button::setFont(const sf::Font& font)
 {
+	sf::FloatRect oldBounds{m_text.getLocalBounds()};
 	m_text.setFont(font);
+	sf::FloatRect newBounds{m_text.getLocalBounds()};
+	sf::Vector2f  deltaSize{newBounds.width  - oldBounds.width,
+	                        newBounds.height - newBounds.height};
+	setSize(m_shape.getSize() + deltaSize); // Apply new shape size
 	updateText();
 }
 
 void sp::Button::setCharSize(unsigned int charSize)
 {
+	sf::FloatRect oldBounds{m_text.getLocalBounds()};
 	m_text.setCharacterSize(charSize);
+	sf::FloatRect newBounds{m_text.getLocalBounds()};
+	sf::Vector2f  deltaSize{newBounds.width  - oldBounds.width,
+	                        newBounds.height - newBounds.height};
+	setSize(m_shape.getSize() + deltaSize); // Apply new shape size
 	updateText();
 }
 
@@ -211,6 +235,7 @@ void sp::Button::update(const sf::Vector2i& mousePosWindow)
 
 void sp::Button::render(sf::RenderTarget* surface)
 {
+	// Draw the button: 1-Render shape; 2-Render text;
 	surface->draw(m_shape);
 	surface->draw(m_text);
 }

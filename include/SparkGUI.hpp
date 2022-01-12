@@ -6,7 +6,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-
+#include <vector>
 namespace sp
 {
 
@@ -28,9 +28,9 @@ private:
 	enum class ButtonState {IDLE, HOVER, ACTIVE};
 	// Private Variables
 	sf::RectangleShape m_shape;
-	sf::Text m_text;
-	unsigned int m_charSize;
+	sf::Text    m_text;
 	ButtonState m_Bstate;
+	float m_padx, m_pady;
 
 	// Styles
 	sp::Style m_idleStyle;
@@ -41,21 +41,25 @@ private:
 	void updateText();
 public:
 	// Constructor/Destructor
-	Button(const sf::Vector2f& pos , const sf::Vector2f& size,
-		   const std::string& text, sf::Font& font,
-		   unsigned int charSize,
-		   const sp::Style& idle_style   = {sf::Color::White,       sf::Color::Black, sf::Color::Black, 2.f},
-		   const sp::Style& hover_style  = {sf::Color(196,196,196), sf::Color::Black, sf::Color::Black, 2.f},
-		   const sp::Style& active_style = {sf::Color(172,172,172), sf::Color::Black, sf::Color::Black, 2.f});
+	Button(const std::string& text, 
+	       sf::Font& font,
+	       unsigned int charSize,
+	       const sf::Vector2f& pos       = {0.f, 0.f}, 
+	       const sf::Vector2f& size      = {0.f, 0.f},
+	       const float& padx = 0.f,
+	       const float& pady = 0.f,
+	       const sp::Style& idle_style   = {sf::Color::White,       sf::Color::Black, sf::Color::Black, 2.f},
+	       const sp::Style& hover_style  = {sf::Color(196,196,196), sf::Color::Black, sf::Color::Black, 2.f},
+	       const sp::Style& active_style = {sf::Color(172,172,172), sf::Color::Black, sf::Color::Black, 2.f});
 	~Button();
 
 	// Accessors
 	bool isPressed() const;
 	const sf::Vector2f& getPosition() const;
 	const sf::Vector2f& getSize() const;
-	const std::string getText() const;
-	const sf::Font*	getFont() const;
-	unsigned int getCharSize() const;
+	const std::string   getText() const;
+	const sf::Font*     getFont() const;
+	unsigned int     getCharSize() const;
 	const sp::Style& getIdleStyle() const;
 	const sp::Style& getHoverStyle() const;
 	const sp::Style& getActiveStyle() const;
@@ -79,8 +83,6 @@ public:
 	void update(const sf::Vector2i& mousePosWindow);
 	void render(sf::RenderTarget* surface);
 };	
-
-
 
 } // sp
 

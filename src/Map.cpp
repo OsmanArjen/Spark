@@ -1,4 +1,4 @@
-#include "../include/Map.hpp"
+#include "Map.hpp"
 
 void sp::Map::initOutlines()
 {
@@ -25,33 +25,33 @@ void sp::Map::initGridlines()
 	for(float y = m_gridSize.y; y < m_size.y; y += m_gridSize.y) // Ignore first and last gridlines for map's outline
 	{	
 		// One line has two point
-		m_gridlines.append(sf::Vertex(sf::Vector2f(0, y), m_gridColor));
+		m_gridlines.append(sf::Vertex(sf::Vector2f(0, y),        m_gridColor));
 		m_gridlines.append(sf::Vertex(sf::Vector2f(m_size.x, y), m_gridColor));
 	}
 
 	for(float x = m_gridSize.x; x < m_size.x; x += m_gridSize.x) // Ignore first and last gridlines for map's outline
 	{
 		// One line has two point
-		m_gridlines.append(sf::Vertex(sf::Vector2f(x, 0), m_gridColor));
+		m_gridlines.append(sf::Vertex(sf::Vector2f(x, 0),        m_gridColor));
 		m_gridlines.append(sf::Vertex(sf::Vector2f(x, m_size.y), m_gridColor));
-	}	
+	}
+
 	m_gridlines.setPrimitiveType(sf::Lines);
 }
 
 
-
 sp::Map::Map(const sf::Vector2f& map_grid, 
-		const sf::Vector2f& grid_size, 
-		const sf::Color& grid_color, 
-		const sf::Color& outline_color)
+             const sf::Vector2f& grid_size, 
+             const sf::Color& grid_color, 
+             const sf::Color& outline_color)
 	: m_size(map_grid.x * grid_size.x,
 			 map_grid.y * grid_size.y)
 	, m_mapGrid(map_grid)
 	, m_gridSize(grid_size)
 	, m_gridColor(grid_color)
 	, m_outlineColor(outline_color)
-	, m_currLayer(nullptr)
 	, m_outlines(sf::LineStrip, 5)
+	, m_currLayer(nullptr)
 	, m_preview(false)
 {
 	initOutlines();
@@ -67,26 +67,27 @@ sp::Map::~Map()
 }
 
 // Getter/Setter methods
-sp::MapLayer* sp::Map::getCurrentLayer()
+sp::MapLayer* sp::Map::getCurrentLayer() const
 {
 
 	return m_currLayer;
 }
 
-sp::MapLayer* sp::Map::getLayer(std::size_t index)
+sp::MapLayer* sp::Map::getLayer(std::size_t index) const
 {
 
 	return m_layers.at(index);
 }
 
-const bool& sp::Map::getPreview()
+const bool& sp::Map::getPreview() const
 {
 	return m_preview;
 }
 
 void sp::Map::setPreview(const bool& preview)
 {
-	m_preview = preview;
+	if( m_preview != preview )
+		m_preview  = preview;
 }
 
 void sp::Map::newLayer()

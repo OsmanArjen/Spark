@@ -11,7 +11,7 @@ private:
 	// Variables
 	sf::Vector2f  m_mapGrid;
 	sf::Vector2f  m_gridSize;
-	std::vector<Tile> m_tileRects;
+	std::vector<std::vector<Tile>> m_tileRects;
 	bool m_visible;
 
 	// For organize layer group
@@ -22,6 +22,8 @@ private:
 	// Initializer Function for tileRects
 	void initLayerTileRects();
 public:
+	// TileRects type name
+	using TileRects_t = std::vector<std::vector<Tile>>;
 	// Constructor
 	MapLayer(const sf::Vector2f& map_grid, 
 			 const sf::Vector2f& grid_size,
@@ -30,17 +32,17 @@ public:
 			 MapLayer* sub_layer  = nullptr);
 	
 	// Functions
-	const int& 	getQueueIndex()  const;
-	const bool& getVisible() const;
-	std::vector<Tile>& getTileRects();
+	const int& 	 getQueueIndex()  const;
+	const bool&  getVisible() const;
+	TileRects_t& getTileRects();
 	MapLayer* getBaseLayer();
 	MapLayer* getSubLayer();
 	void setQueueIndex(int index);
 	void setVisible(bool visible);
 	void setBaseLayer(MapLayer* base_layer);
 	void setSubLayer(MapLayer* sub_layer);
-
-	void update(float mousePos);
+	
+	//-Render
 	void render(sf::RenderTarget* surface);
 };
 } // sp

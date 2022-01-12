@@ -2,7 +2,6 @@
 #define MAP_HPP
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <algorithm> 
 #include <vector>
 #include "MapLayer.hpp"
@@ -16,9 +15,9 @@ private:
 	sf::Vector2f m_mapGrid;
 	sf::Vector2f m_gridSize;
 	sf::Color m_gridColor, m_outlineColor;
+	sf::VertexArray m_outlines, m_gridlines;
 	std::vector<MapLayer*> m_layers;
 	MapLayer* m_currLayer;
-	sf::VertexArray m_outlines, m_gridlines;
 	bool m_preview;
 public:
 	// Initializer Functions
@@ -32,17 +31,19 @@ public:
 	~Map();
 
 	// Getter/Setter methods
-	MapLayer* getCurrentLayer();
-	MapLayer* getLayer(std::size_t index);
-	const bool& getPreview();
+	MapLayer* getCurrentLayer() const;
+	MapLayer* getLayer(std::size_t index) const;
+	const bool& getPreview() const;
 	void setPreview(const bool& preview);
-	void newLayer();
 	void setCurrentLayer(std::size_t index);
+	// Layer functions
+	void newLayer();
 	void nextLayer();
 	void prevLayer();
-	// Functions
 	void sortLayersByQueue();
 	void updateLayersQueue();
+
+	// Render
 	void render(sf::RenderTarget* surface);
 };
 } // sp

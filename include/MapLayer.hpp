@@ -5,31 +5,26 @@
 
 namespace sp
 {
-class MapLayer
+struct MapLayer
 {
-private:
+
 	// Variables
-	sf::Vector2f  m_mapGrid;
-	sf::Vector2f  m_gridSize;
-	std::vector<std::vector<Tile>> m_tileRects;
-	bool m_visible;
+	sf::Vector2f  mapGrid;
+	sf::Vector2f  gridSize;
+	std::vector<std::vector<Tile>> tileRects;
+	bool visible;
 
 	// For organize layer group
-	MapLayer* m_baseLayer;
-	int m_queueIndex;
-	MapLayer* m_subLayer;
+	MapLayer* baseLayer;
+	int queueIndex;
+	MapLayer* subLayer;
 
 	// Initializer Function for tileRects
-	void initLayerTileRects();
 public:
 	// TileRects type name
 	using TileRects_t = std::vector<std::vector<Tile>>;
 	// Constructor
-	MapLayer(const sf::Vector2f& map_grid, 
-			 const sf::Vector2f& grid_size,
-			 int queue_indx,
-			 MapLayer* base_layer = nullptr,
-			 MapLayer* sub_layer  = nullptr);
+
 	
 	// Functions
 	const int& 	 getQueueIndex()  const;
@@ -43,7 +38,12 @@ public:
 	void setSubLayer(MapLayer* sub_layer);
 	
 	//-Render
-	void render(sf::RenderTarget* surface);
+	
 };
+
+void renderMapLayer(sf::RenderTarget* surface, const MapLayer& layer);
+MapLayer createMapLayer(const sf::Vector2f& map_grid, const sf::Vector2f& grid_size,int queue_indx, 
+			MapLayer* base_layer = nullptr,MapLayer* sub_layer  = nullptr);
+
 } // sp
 #endif // MAP_LAYER_HPP

@@ -1,88 +1,33 @@
 // FIX: layer sisteminde düzenlemeler veya hatalar olacak onları düzelt!
 #include "MapLayer.hpp"
 
-// Initializer Function for tileRects
-void sp::MapLayer::initLayerTileRects()
+sp::MapLayer sp::createMapLayer(const sf::Vector2f& map_grid, const sf::Vector2f& grid_size, int queue_idx,
+		   		MapLayer* base_layer, MapLayer* sub_layer)
 {
-	for (int y = 0; y < m_mapGrid.y; y++)
+	sp::MapLayer layer;
+	layer.mapGrid  = map_grid;
+	layer.gridSize = grid_size;
+	layer.visible  = true;
+	layer.baseLayer  = base_layer;
+	layer.queueIndex = queue_idx; 
+	layer.subLayer   = sub_layer;
+	for (int y = 0; y < layer.mapGrid.y; y++)
 	{
-		m_tileRects.push_back(std::vector<Tile>());
-		for (int x = 0; x < m_mapGrid.x; x++)
+		layer.tileRects.push_back(std::vector<Tile>());
+		for (int x = 0; x < layer.mapGrid.x; x++)
 		{
-			std::vector<Tile>& TileRow{m_tileRects.back()};
-			TileRow.push_back({ {x * m_gridSize.x, y * m_gridSize.y}, m_gridSize, {x,y} });
+			std::vector<Tile>& TileRow{layer.tileRects.back()};
+			TileRow.push_back({ {x * layer.gridSize.x, y * layer.gridSize.y}, layer.gridSize, {x,y} });
 		}
 	}
 }
 
-// Constructor
-sp::MapLayer::MapLayer(const sf::Vector2f& map_grid, 
-					   const sf::Vector2f& grid_size,
-					   int queue_indx,
-					   MapLayer* base_layer,
-					   MapLayer* sub_layer)
-	: m_mapGrid(map_grid)
-	, m_gridSize(grid_size)
-	, m_visible(true)
-	, m_baseLayer(base_layer)
-	, m_queueIndex(queue_indx)
-	, m_subLayer(sub_layer)
-{
-	initLayerTileRects();
-}
 
-// Functions
-const int& sp::MapLayer::getQueueIndex() const
+void sp::renderMapLayer(sf::RenderTarget* surface, const sp::MapLayer& layer)
 {
-	return m_queueIndex;
-}
-
-const bool& sp::MapLayer::getVisible() const
-{
-	return m_visible;
-}
-
-sp::MapLayer::TileRects_t& sp::MapLayer::getTileRects()
-{
-	return m_tileRects;
-}
-
-sp::MapLayer* sp::MapLayer::getBaseLayer()
-{
-	return m_baseLayer;
-}
-
-sp::MapLayer* sp::MapLayer::getSubLayer()
-{
-	return m_subLayer;
-}
-
-void sp::MapLayer::setQueueIndex( int index)
-{
-	m_queueIndex = index;
-}
-
-void sp::MapLayer::setVisible(bool visible)
-{
-	m_visible = visible;
-}
-
-void sp::MapLayer::setBaseLayer(sp::MapLayer* base_layer)
-{
-	m_baseLayer = base_layer;
-}
-
-void sp::MapLayer::setSubLayer(sp::MapLayer* sub_layer)
-{
-	m_subLayer = sub_layer;
-
-}
-
-void sp::MapLayer::render(sf::RenderTarget* surface)
-{
-	if(m_visible)
+	if(layer.visible)
 	{	
-		for(std::vector<Tile>& tilerow : m_tileRects)
+		for(std::vector<Tile>& tilerow : layer.tileRects)
 		{	
 			for(Tile& tile : tilerow)
 			{

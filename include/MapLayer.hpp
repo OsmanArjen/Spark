@@ -19,7 +19,7 @@ struct MapLayer
 };
 
 void renderMapLayer(sf::RenderTarget* surface, const MapLayer& layer);
-MapLayer createMapLayer(const sf::Vector2f& map_grid, const sf::Vector2f& grid_size,int queue_indx, 
+MapLayer createMapLayer(const sf::Vector2f& map_grid, const sf::Vector2f& grid_size,int queue_idx, 
 			MapLayer* base_layer = nullptr,MapLayer* sub_layer  = nullptr);
 
 } // sp
